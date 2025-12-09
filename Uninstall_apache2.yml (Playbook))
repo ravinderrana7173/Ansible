@@ -1,0 +1,30 @@
+---
+- name: Uninstall Apache2 from server
+  hosts: node2
+  become: yes
+  tasks:
+
+    - name: Stop Apache2 service
+      service:
+        name: apache2
+        state: stopped
+      ignore_errors: yes
+
+    - name: Uninstall Apache2 package
+      apt:
+        name: apache2
+        state: absent
+        purge: yes
+
+    - name: Remove Apache2 dependencies
+      apt:
+        autoremove: yes
+
+    - name: Delete Apache2 configuration and log files
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - /etc/apache2
+        - /var/log/apache2
+        - /var/www/html
