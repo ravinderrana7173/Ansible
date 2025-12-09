@@ -1,0 +1,9 @@
+---
+- hosts: node2
+  become: true
+  tasks:
+    - name: Install apache httpd
+      ansible.builtin.apt:
+        name: apache2
+        state: absent
+        update_cache: yes
