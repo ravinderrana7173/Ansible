@@ -1,0 +1,45 @@
+- name: Server Provisioning Playbook
+  hosts: manage-nodes
+  become: true
+  gather_facts: true
+
+  tasks:
+
+    - name: Update apt cache (Ubuntu)
+      apt:
+        update_cache: yes
+        upgrade: dist
+      when: ansible_os_family == "Debian"
+
+    - name: Install common packages
+      package:
+        name:
+          - curl
+          - wget
+          - git
+          - vim
+          - unzip
+          - net-tools
+        state: present
+
+    - name: Set hostname
+      hostname:
+        name: provisioned-server
+
+    - name: Set timezone
+      timezone:
+        name: Asia/Kolkata
+
+    - name: Create DevOps user
+      user:
+        name: devops
+        shell: /bin/bash
+        groups: sudo
+        append: yes
+        create_home: yes
+
+    - name: Add SSH key for devops user
+      authorized_key:
+        user: devops
+        state: present
+        key: "{{ lookup('file', '~/.ssh/id_ed25519.pub') }}"
