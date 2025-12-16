@@ -26,6 +26,14 @@ openssl rand -base64 2048 > vault.pass
 ansible-vault create group_vars/all/pass.yml --vault-password-file vault.pass
 ```
 
+3. Decrypt the vault file
+```
+ansible-vault decrypt group_vars/all/pass.yml --vault-password-file vault.pass
+
+4. Edit the Encrypted Vault file
+```
+ansible-vault edit group_vars/all/pass.yml --vault-password-file vault.pass
+
 
 
 
